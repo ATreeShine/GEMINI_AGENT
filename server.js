@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 // Configuration
 const CONFIG = {
   port: process.env.PORT || 3000,
-  apiKey: process.env.GEMINI_API_KEY || 'AIzaSyAqLbXyaC6LCd-DqGLnBw4Y9GLPOI7BRIs', // Make sure you have this set
+  apiKey: process.env.GEMINI_API_KEY || '', // Make sure you have this set
   model: 'gemini-2.0-flash-thinking-exp-1219', // Updated to newer model name
   chatSaveDir: path.join(__dirname, 'saved_chats'),
   exportDir: path.join(__dirname, 'exports'),
