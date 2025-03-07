@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced AI Chat Interface</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body class="theme-light">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chats</h2>
+                <button id="new-chat-btn" class="icon-btn" title="New Chat">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="sidebar-content">
+                <div id="chat-list" class="chat-list">
+                    <!-- Chat list items will be added here -->
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <button id="settings-btn" class="icon-text-btn">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+                <button id="toggle-theme-btn" class="icon-text-btn" title="Toggle Theme">
+                    <i class="fas fa-moon"></i> Theme
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <button id="toggle-sidebar-btn" class="icon-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2 id="chat-title">New Conversation</h2>
+                <div class="chat-actions">
+                    <button id="export-btn" class="icon-btn" title="Export Chat">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button id="clear-btn" class="icon-btn" title="Clear Chat">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="chat-container" id="chat-container">
+                <!-- Welcome Message -->
+                <div class="welcome-container" id="welcome-container">
+                    <h3>Welcome to Advanced AI Chat</h3>
+                    <p>Start a conversation with the AI assistant. Your chats are saved automatically.</p>
+                    <div class="suggestion-chips">
+                        <button class="suggestion-chip">Tell me a joke</button>
+                        <button class="suggestion-chip">Help me learn JavaScript</button>
+                        <button class="suggestion-chip">Write a poem about technology</button>
+                        <button class="suggestion-chip">Explain quantum computing</button>
+                    </div>
+                </div>
+                
+                <!-- Messages will be added here -->
+                <div id="messages" class="messages"></div>
+                
+                <!-- Typing indicator -->
+                <div id="typing-indicator" class="typing-indicator hidden">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-container">
+                <textarea id="message-input" placeholder="Type your message here..." rows="1" autofocus></textarea>
+                <div class="input-buttons">
+                    <button id="send-btn" class="primary-btn" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h4>AI Behavior</h4>
+                    <div class="setting-item">
+                        <label for="system-prompt">System Prompt:</label>
+                        <textarea id="system-prompt" placeholder="Instructions for the AI...">You are an AI assistant. Respond thoughtfully and helpfully.</textarea>
+                    </div>
+                    <div class="setting-item">
+                        <label for="temperature">Temperature: <span id="temperature-value">0.7</span></label>
+                        <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7">
+                        <div class="setting-description">Higher values make output more random, lower values more deterministic</div>
+                    </div>
+                    <div class="setting-item">
+                        <label for="max-tokens">Max Output Tokens: <span id="max-tokens-value">4096</span></label>
+                        <input type="range" id="max-tokens" min="256" max="8192" step="256" value="4096">
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>Advanced (for Enthusiasts)</h4>
+                    <div class="setting-item">
+                        <label for="top-p">Top-P: <span id="top-p-value">0.95</span></label>
+                        <input type="range" id="top-p" min="0.1" max="1" step="0.05" value="0.95">
+                        <div class="setting-description">Controls diversity via nucleus sampling</div>
+                    </div>
+                    <div class="setting-item">
+                        <label for="top-k">Top-K: <span id="top-k-value">40</span></label>
+                        <input type="range" id="top-k" min="1" max="100" step="1" value="40">
+                        <div class="setting-description">Controls diversity by limiting the number of options considered</div>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>Interface Settings</h4>
+                    <div class="setting-item checkbox">
+                        <input type="checkbox" id="auto-scroll" checked>
+                        <label for="auto-scroll">Auto-scroll to new messages</label>
+                    </div>
+                    <div class="setting-item checkbox">
+                        <input type="checkbox" id="show-timestamps">
+                        <label for="show-timestamps">Show message timestamps</label>
+                    </div>
+                    <div class="setting-item checkbox">
+                        <input type="checkbox" id="keyboard-shortcuts" checked>
+                        <label for="keyboard-shortcuts">Enable keyboard shortcuts</label>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>Keyboard Shortcuts</h4>
+                    <div class="shortcuts-list">
+                        <div class="shortcut-item">
+                            <span class="shortcut-key">Ctrl + Enter</span>
+                            <span class="shortcut-description">Send message</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-key">Ctrl + N</span>
+                            <span class="shortcut-description">New chat</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-key">Ctrl + /</span>
+                            <span class="shortcut-description">Focus input</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-key">Esc</span>
+                            <span class="shortcut-description">Close modal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-settings-btn" class="primary-btn">Save Settings</button>
+                <button id="reset-settings-btn" class="secondary-btn">Reset to Defaults</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Export Chat</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label>Export Format:</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="export-format" value="json" checked> JSON
+                        </label>
+                        <label>
+                            <input type="radio" name="export-format" value="markdown"> Markdown
+                        </label>
+                    </div>
+                </div>
+                <div class="setting-item checkbox">
+                    <input type="checkbox" id="include-settings" checked>
+                    <label for="include-settings">Include chat settings</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="do-export-btn" class="primary-btn">Export</button>
+                <button class="cancel-btn secondary-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Chat</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this chat? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-delete-btn" class="danger-btn">Delete</button>
+                <button class="cancel-btn secondary-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
